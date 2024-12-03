@@ -9,19 +9,17 @@ OpenResty was chosen for its minimal overhead and its foundation on Nginx, which
 ## Requirements
 
 - OpenResty
-- Lua modules:
-   - `resty.upload`
-   - `cjson`
-   - `resty.http`
+- LuaRocks or opm
 
 ## Installation
 
 1. Install OpenResty: [OpenResty Installation Guide](https://openresty.org/en/installation.html)
 2. Install Lua modules:
    ```sh
-   opm get pintsized/lua-resty-http
-   opm get openresty/lua-cjson
-   opm get openresty/lua-resty-upload
+    luarocks install luaposix
+    luarocks install lua-resty-http
+    luarocks install lua-cjson
+    luarocks install lua-resty-upload
    ```
 
 ## Configuration
@@ -59,27 +57,18 @@ curl -X POST http://yourserver/endpoint \
   -d '{"key": "value"}'
 ```
 
-## File Descriptions
+## Potential Issues
 
-### `handler.lua`
+### DNS Resolver Not Defined
 
-Handles incoming requests, validates headers, and delegates processing based on content type.
+If you encounter an error indicating that no resolver is defined to resolve a domain, you need to add a DNS resolver to your OpenResty configuration. Add the following resolver configuration to your `nginx.conf` file:
 
-### `multipart.lua`
-
-Processes multipart/form-data requests, reads form data, and builds the multipart body.
-
-### `json_handler.lua`
-
-Processes application/json requests, reads the request body, and forwards it to the specified API.
-
-### `request.lua`
-
-Sends HTTP requests using the `resty.http` module.
-
-### `proxy.lua`
-
-Main entry point for handling requests.
+```nginx
+http {
+    resolver 8.8.8.8;
+    # other configurations
+}
+````
 
 ## License
 
